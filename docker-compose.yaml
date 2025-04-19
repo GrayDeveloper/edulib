@@ -1,4 +1,4 @@
-
+version: "2.4"
 name: edulib-dev
 services:
   db:
@@ -17,10 +17,10 @@ services:
       - app-network
 
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
+      test: ["CMD-SHELL", "/usr/local/bin/healthcheck.sh --su-mysql --connect"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
   app:
     image: edulib/backend 
@@ -28,10 +28,11 @@ services:
     ports:
       - "8080:8080"
     env_file:
-      - .env
+      - ./BACKEND/.env
     depends_on:
       db:
         condition: service_healthy
+    restart: unless-stopped
     networks:
       - app-network
 
