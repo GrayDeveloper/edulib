@@ -1,0 +1,12 @@
+node_modules
+.vscode
+.env
+logs
+
+/node_modules
+.vscode
+/.next/
+/out/
+/build
+.env*
+.vercel
