@@ -1,0 +1,42 @@
+
+name: edulib-dev
+services:
+  db:
+    image: mariadb:latest
+    container_name: edulib-database
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_DATABASE: edulib_debug
+      MYSQL_USER: su123
+      MYSQL_PASSWORD: 1234
+    ports:
+      - "3306:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - app-network
+
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  app:
+    image: edulib/backend 
+    container_name: edulib-backend
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app-network
+
+networks:
+  app-network:
+
+volumes:
+  db-data:
