@@ -47,7 +47,7 @@ sequelize
               logger.log("error", `Error creating admin user: ${error}`)
             );
 
-          if (process.env.APP_DEMO == true) {
+          if (process.env.APP_DEMO) {
             loadExampleData();
           }
         }
