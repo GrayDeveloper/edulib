@@ -1,7 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  transpilePackages: ["react-qr-barcode-scanner"],
+  output: "standalone",
+  async rewrites() {
+    return [
+      {
+        source: "/api/:path*",
+        destination: "http://nginx_proxy/api/:path*", // internal Docker network
+      },
+    ];
+  },
 };
 
 export default nextConfig;
