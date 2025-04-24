@@ -4,9 +4,6 @@ services:
     image: mariadb:latest
     container_name: edulib-database
     environment:
-      MYSQL_ROOT_PASSWORD: 123
-      MYSQL_DATABASE: edulib_debug
-
 
     env_file:
       - ./BACKEND/.env

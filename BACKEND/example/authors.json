@@ -1,0 +1,92 @@
+[
+  {
+    "authorID": 1,
+    "name": "Petőfi Sándor",
+    "birthDate": "1823.01.01",
+    "deathDate": "1849.07.31"
+  },
+  {
+    "authorID": 2,
+    "name": "Arany János",
+    "birthDate": "1817.03.02",
+    "deathDate": "1882.10.22"
+  },
+  {
+    "authorID": 3,
+    "name": "József Attila",
+    "birthDate": "1905.04.11",
+    "deathDate": "1937.12.03"
+  },
+  {
+    "authorID": 4,
+    "name": "Ady Endre",
+    "birthDate": "1877.11.22",
+    "deathDate": "1919.01.27"
+  },
+  {
+    "authorID": 5,
+    "name": "Radnóti Miklós",
+    "birthDate": "1909.05.05",
+    "deathDate": "1944.11.09"
+  },
+  {
+    "authorID": 6,
+    "name": "Móricz Zsigmond",
+    "birthDate": "1879.06.29",
+    "deathDate": "1942.09.05"
+  },
+  {
+    "authorID": 7,
+    "name": "Móra Ferenc",
+    "birthDate": "1879.07.19",
+    "deathDate": "1934.02.08"
+  },
+  {
+    "authorID": 8,
+    "name": "Gárdonyi Géza",
+    "birthDate": "1863.08.03",
+    "deathDate": "1922.10.30"
+  },
+  {
+    "authorID": 9,
+    "name": "Mikszáth Kálmán",
+    "birthDate": "1847.01.16",
+    "deathDate": "1910.05.28"
+  },
+  {
+    "authorID": 10,
+    "name": "Karinthy Frigyes",
+    "birthDate": "1887.06.25",
+    "deathDate": "1938.08.29"
+  },
+  {
+    "authorID": 11,
+    "name": "Weöres Sándor",
+    "birthDate": "1913.06.22",
+    "deathDate": "1989.01.22"
+  },
+  {
+    "authorID": 12,
+    "name": "Kosztolányi Dezső",
+    "birthDate": "1885.03.29",
+    "deathDate": "1936.11.03"
+  },
+  {
+    "authorID": 13,
+    "name": "Babits Mihály",
+    "birthDate": "1883.11.26",
+    "deathDate": "1941.08.04"
+  },
+  {
+    "authorID": 14,
+    "name": "Szabó Magda",
+    "birthDate": "1917.10.05",
+    "deathDate": "2007.11.19"
+  },
+  {
+    "authorID": 15,
+    "name": "Lázár Ervin",
+    "birthDate": "1936.05.05",
+    "deathDate": "2006.12.22"
+  }
+]

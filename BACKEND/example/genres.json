@@ -1,0 +1,30 @@
+[
+  {
+    "genreID": 1,
+    "name": "Klasszikus"
+  },
+  {
+    "genreID": 2,
+    "name": "Kortárs"
+  },
+  {
+    "genreID": 3,
+    "name": "Tudományos"
+  },
+  {
+    "genreID": 4,
+    "name": "Utazás"
+  },
+  {
+    "genreID": 5,
+    "name": "Mesék"
+  },
+  {
+    "genreID": 6,
+    "name": "Vallás"
+  },
+  {
+    "genreID": 7,
+    "name": "Tankönyvek"
+  }
+]

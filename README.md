@@ -24,7 +24,7 @@ Clone the repository:
 
 ```bash
 git clone https://github.com/GrayDeveloper/edulib.git
-cd your/repo
+cd edulib
 ```
 
 Configure your environment variables, using the provided `.env` files as templates:

@@ -28,11 +28,8 @@ RUN \
     else echo "Lockfile not found." && exit 1; \
     fi
 
-# Production image, copy all the files and run next
 FROM base AS runner
 WORKDIR /app
-
-ENV NODE_ENV=production
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs

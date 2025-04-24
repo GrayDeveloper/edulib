@@ -1,0 +1,177 @@
+[
+  {
+    "authorID": 1,
+    "title": "János vitéz",
+    "description": "Elbeszélő költemény, Petőfi legismertebb mesés kalandregénye versformában.",
+    "releaseDate": "1845.01.01",
+    "genreID": 1
+  },
+  {
+    "authorID": 2,
+    "title": "Toldi",
+    "description": "Elbeszélő költemény egy parasztfiú hőssé válásáról.",
+    "releaseDate": "1846.01.01",
+    "genreID": 1
+  },
+  {
+    "authorID": 2,
+    "title": "Toldi estéje",
+    "description": "A hős Toldi életének utolsó szakaszát bemutató verses elbeszélés.",
+    "releaseDate": "1848.01.01",
+    "genreID": 1
+  },
+  {
+    "authorID": 3,
+    "title": "József Attila összes versei",
+    "description": "József Attila életműve verseskötetbe rendezve.",
+    "releaseDate": "1944.01.01",
+    "genreID": 1
+  },
+  {
+    "authorID": 4,
+    "title": "Új versek",
+    "description": "A magyar modern költészet indulását jelölő verseskötet.",
+    "releaseDate": "1906.01.01",
+    "genreID": 1
+  },
+  {
+    "authorID": 5,
+    "title": "Radnóti Miklós összes versei és versfordításai",
+    "description": "Radnóti életműve verseskötet formájában.",
+    "releaseDate": "1948.01.01",
+    "genreID": 1
+  },
+  {
+    "authorID": 6,
+    "title": "Légy jó mindhalálig",
+    "description": "Egy nyírségi diák küzdelmes, tiszta életének története.",
+    "releaseDate": "1920.01.01",
+    "genreID": 1
+  },
+  {
+    "authorID": 6,
+    "title": "Rokonok",
+    "description": "Egy kisvárosi ügyész a korrupció hálójában.",
+    "releaseDate": "1930.01.01",
+    "genreID": 1
+  },
+  {
+    "authorID": 7,
+    "title": "Kincskereső kisködmön",
+    "description": "Gyermekregény a szegénységről, becsületről és reményről.",
+    "releaseDate": "1918.01.01",
+    "genreID": 5
+  },
+  {
+    "authorID": 8,
+    "title": "Egri csillagok",
+    "description": "A törökellenes harc hőseinek regénye Gárdonyi Géza tollából.",
+    "releaseDate": "1901.01.01",
+    "genreID": 1
+  },
+  {
+    "authorID": 8,
+    "title": "A láthatatlan ember",
+    "description": "Történelmi regény a hunok világából.",
+    "releaseDate": "1902.01.01",
+    "genreID": 1
+  },
+  {
+    "authorID": 9,
+    "title": "Szent Péter esernyője",
+    "description": "Egy különleges ernyő köré szőtt humoros, romantikus történet.",
+    "releaseDate": "1895.01.01",
+    "genreID": 1
+  },
+  {
+    "authorID": 9,
+    "title": "A fekete város",
+    "description": "Politikai és szerelmi összeesküvés egy felvidéki városban.",
+    "releaseDate": "1910.01.01",
+    "genreID": 1
+  },
+  {
+    "authorID": 10,
+    "title": "Tanár úr kérem",
+    "description": "Humoros jelenetek diákokról és iskolai életről.",
+    "releaseDate": "1916.01.01",
+    "genreID": 1
+  },
+  {
+    "authorID": 10,
+    "title": "Utazás a koponyám körül",
+    "description": "Karinthy Ferenc agyműtétének szellemes és filozofikus leírása.",
+    "releaseDate": "1937.01.01",
+    "genreID": 4
+  },
+  {
+    "authorID": 11,
+    "title": "Bóbita",
+    "description": "Lírai és játékos gyermekversek gyűjteménye.",
+    "releaseDate": "1955.01.01",
+    "genreID": 5
+  },
+  {
+    "authorID": 11,
+    "title": "Psyché",
+    "description": "Költött női költő élettörténete vers- és naplórészletekkel.",
+    "releaseDate": "1972.01.01",
+    "genreID": 1
+  },
+  {
+    "authorID": 12,
+    "title": "Édes Anna",
+    "description": "Egy cselédlány tragikus sorsát bemutató társadalmi regény.",
+    "releaseDate": "1926.01.01",
+    "genreID": 1
+  },
+  {
+    "authorID": 12,
+    "title": "Esti Kornél",
+    "description": "Esti Kornél utazásai és gondolatainak filozofikus történetei.",
+    "releaseDate": "1933.01.01",
+    "genreID": 1
+  },
+  {
+    "authorID": 13,
+    "title": "A gólyakalifa",
+    "description": "Két világban élő fiatal elmejátékos története.",
+    "releaseDate": "1916.01.01",
+    "genreID": 1
+  },
+  {
+    "authorID": 13,
+    "title": "Halálfiai",
+    "description": "Egy polgári család hanyatlásának regénye.",
+    "releaseDate": "1927.01.01",
+    "genreID": 1
+  },
+  {
+    "authorID": 14,
+    "title": "Abigél",
+    "description": "Egy református lányiskolába zárt lány sorsa a háború idején.",
+    "releaseDate": "1970.01.01",
+    "genreID": 2
+  },
+  {
+    "authorID": 14,
+    "title": "Az ajtó",
+    "description": "Az írónő és házvezetőnője közti mély kapcsolat története.",
+    "releaseDate": "1987.01.01",
+    "genreID": 2
+  },
+  {
+    "authorID": 15,
+    "title": "A Négyszögletű Kerek Erdő",
+    "description": "Különleges szereplők kalandjai egy varázslatos erdőben.",
+    "releaseDate": "1985.01.01",
+    "genreID": 5
+  },
+  {
+    "authorID": 15,
+    "title": "Berzsián és Dideki",
+    "description": "Mesés történet két furcsa lakóról egy költői faluban.",
+    "releaseDate": "1979.01.01",
+    "genreID": 5
+  }
+]

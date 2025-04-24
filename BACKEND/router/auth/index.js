@@ -95,7 +95,7 @@ router.post("/logout", async (req, res) => {
     logger.log("user", `User ${req?.user?.email} logged out.`);
     req.session.destroy(function () {
       res.clearCookie("connect.sid", { path: "/" });
-      return res.redirect(200, process.env.FRONTEND_URL);
+      return res.redirect(200, "/");
     });
   });
 });

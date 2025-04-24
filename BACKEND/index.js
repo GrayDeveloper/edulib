@@ -7,7 +7,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
-  res.send(`EduLIB API ${process.env.API_VERSION}`);
+  res.send(`EduLIB API ${process.env.SERVER_VERSION}`);
 });
 
 const logger = require("./modules/logManager");

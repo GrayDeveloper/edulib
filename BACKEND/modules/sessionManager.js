@@ -11,7 +11,7 @@ const sequelizeSessionStore = new SessionStore({
 const sessionManager = (app) => {
   app.use(
     session({
-      secret: "t^7v_evgrhmrcr_(hbm%gw*lb0%pqk1=t+oyjc(yye39qel^y",
+      secret: process.env.APP_SESSION_SECRET,
       resave: false,
       saveUninitialized: false,
       cookie: {
@@ -26,7 +26,19 @@ const sessionManager = (app) => {
   app.use(passport.initialize());
   app.use(passport.session());
 
-  app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
+  app.use(
+    cors({
+      origin: [
+        "http://" + process.env.APP_DOMAIN,
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://frontend_server:3000",
+        "http://frontend_server",
+        "http://localhost",
+      ],
+      credentials: true,
+    })
+  );
 };
 
 module.exports = sessionManager;
