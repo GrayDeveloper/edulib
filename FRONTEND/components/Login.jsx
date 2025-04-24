@@ -1,11 +1,11 @@
 //Imports
 import { MetaData } from "@/components/MetaData";
+import { Field, Formik } from "formik";
 import Link from "next/link";
-import { Formik, Field, Form } from "formik";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import * as yup from "yup";
-import { useRouter } from "next/router";
 
 //Custom modules
 
@@ -125,7 +125,7 @@ const LoginModule = () => {
   };
 
   return (
-    <div className="min-h-screen w-screen flex flex-col items-center justify-evenly bg-softmint px-10">
+    <div className="min-h-screen w-screen flex flex-col items-center justify-evenly px-10">
       <MetaData title="Bejelentkezés" />
       <Link href="/" className="w-1/3 md:w-48 transition-all">
         <img src="/logo.svg"></img>
@@ -162,7 +162,7 @@ const LoginModule = () => {
                   id="name"
                   name="name"
                   placeholder="Név"
-                  className="w-full text-input-1"
+                  className="w-full text-input-4"
                 />
                 {formik.touched.name && formik.errors.name ? (
                   <p className="field-error-1">{formik.errors.name}</p>
@@ -174,7 +174,7 @@ const LoginModule = () => {
               id="email"
               name="email"
               placeholder="Email"
-              className="w-full text-input-1"
+              className="w-full text-input-4"
               type="email"
             />
             {formik.touched.email && formik.errors.email ? (
@@ -185,7 +185,7 @@ const LoginModule = () => {
               id="password"
               name="password"
               placeholder="Jelszó"
-              className="w-full text-input-1"
+              className="w-full text-input-4"
               type="password"
             />
 
@@ -199,7 +199,7 @@ const LoginModule = () => {
                   id="passwordAgain"
                   name="passwordAgain"
                   placeholder="Jelszó újra"
-                  className="w-full text-input-1"
+                  className="w-full text-input-4"
                   type="password"
                 />
                 {formik.touched.passwordAgain && formik.errors.passwordAgain ? (

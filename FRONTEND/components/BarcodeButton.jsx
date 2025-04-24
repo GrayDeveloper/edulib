@@ -1,6 +1,5 @@
 const { X } = require("@phosphor-icons/react/dist/ssr");
 const { useState } = require("react");
-const { default: toast } = require("react-hot-toast");
 
 const scanCode = (code) => {
   if (code?.length < 3) return;
@@ -40,7 +39,7 @@ const scanCode = (code) => {
   return codeObj;
 };
 
-const BarcodeButton = ({ markRental, className }) => {
+const BarcodeButton = ({ markRental, onScan, className }) => {
   if (!markRental) {
     return;
   }
@@ -49,18 +48,18 @@ const BarcodeButton = ({ markRental, className }) => {
   if (!Active) {
     return (
       <button
-        className={"button-2 w-fit mx-10 " + className}
+        className={"button-2 w-fit " + className}
         onClick={() => {
           setActive(true);
         }}
-        title="Barcode olvasó megnyitása"
+        title="Vonalkód olvasó megnyitása"
       >
-        Barcode olvasó megnyitása
+        Vonalkód olvasó megnyitása
       </button>
     );
   } else {
     return (
-      <div className={"flex items-center gap-5 mx-10 " + className}>
+      <div className={"flex items-center gap-5 " + className}>
         <input
           type="text"
           id="barcode"
@@ -71,6 +70,10 @@ const BarcodeButton = ({ markRental, className }) => {
           onKeyDown={(event) => {
             if (event.key == "Enter") {
               const code = scanCode(event.currentTarget.value);
+
+              if (onScan) {
+                onScan(code);
+              }
 
               if (code?.type == "EPR") {
                 markRental(code?.code?.slice(4), "active");
@@ -85,7 +88,7 @@ const BarcodeButton = ({ markRental, className }) => {
         />
 
         <button
-          title="Barcode olvasó bezárása"
+          title="Vonalkód olvasó bezárása"
           className="bg-charcoal/10 text-charcoal font-bold p-2.5 rounded-2xl"
           onClick={() => {
             setActive(false);

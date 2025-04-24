@@ -6,14 +6,12 @@ import { Menu } from "@/components/Menu";
 import { MetaData } from "@/components/MetaData";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import toast from "react-hot-toast";
 
 //Custom modules
 
 //AuthorPage
 const AuthorPage = ({ user, author, error }) => {
   //Router
-  const router = useRouter();
 
   //Hooks
 

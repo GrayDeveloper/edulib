@@ -61,7 +61,7 @@ const EditUserModal = ({ userData, onClose, onSubmit }) => {
                   <p className="field-error-1">{formik.errors.email}</p>
                 ) : null}
 
-                <div className="flex gap-10 ">
+                <div className="flex flex-col md:flex-row gap-10 ">
                   <Field as="select" name="permission" className="text-input-3">
                     <option value={0}>{permissionTable[0]}</option>
                     <option value={1}>{permissionTable[1]}</option>

@@ -1,5 +1,6 @@
 //Imports
 
+import ErrorHandler from "@/components/Error";
 import Layout from "@/components/Layout";
 import { Menu } from "@/components/Menu";
 import { MetaData } from "@/components/MetaData";
@@ -79,6 +80,15 @@ const AuthorsManagmentPage = ({ user, authors, error }) => {
       }
     });
   };
+
+  if (error?.protected) {
+    return <ErrorHandler statusCode={error?.protected} />;
+  }
+
+  if (error?.user) {
+    return <ErrorHandler statusCode={error?.user} />;
+  }
+
   return (
     <>
       <EditAuthorModal
@@ -146,7 +156,10 @@ const AuthorsManagmentPage = ({ user, authors, error }) => {
 
             {authors?.map((a) => {
               return (
-                <div className="min-w-[700px] flex justify-center items-center px-4 py-2 my-1">
+                <div
+                  className="min-w-[700px] flex justify-center items-center px-4 py-2 my-1"
+                  key={a?.authorID}
+                >
                   <div className="flex-[0.5] text-gray-500 pr-4 ">
                     {a?.authorID}
                   </div>
@@ -201,33 +214,26 @@ const AuthorsManagmentPage = ({ user, authors, error }) => {
 export default AuthorsManagmentPage;
 
 export async function getServerSideProps(ctx) {
-  try {
-    const userRes = await fetch(`${process.env.SERVER_URL}/api/users/me`, {
-      headers: {
-        cookie: ctx.req.headers?.cookie,
-      },
-    });
-    const userData = await userRes.json();
+  const cookie = ctx.req.headers?.cookie;
 
-    const authorRes = await fetch(`${process.env.SERVER_URL}/api/authors`, {
-      headers: {
-        cookie: ctx.req.headers?.cookie,
-      },
-    });
-    const authorData = await authorRes.json();
+  const userRes = await fetch(`${process.env.SERVER_URL}/api/users/me`, {
+    headers: { cookie },
+  });
+  const userData = userRes.ok ? await userRes.json() : null;
 
-    return {
-      props: {
-        user: userData,
-        authors: authorData,
-        error: userRes?.status || rentalsRes?.status,
+  const dataRes = await fetch(`${process.env.SERVER_URL}/api/authors`, {
+    headers: { cookie },
+  });
+  const data = dataRes.ok ? await dataRes.json() : null;
+
+  return {
+    props: {
+      user: userData,
+      authors: data,
+      error: {
+        user: userRes.status !== 200 ? userRes.status : null,
+        protected: dataRes.status !== 200 ? dataRes.status : null,
       },
-    };
-  } catch (error) {
-    return {
-      props: {
-        error: 503,
-      },
-    };
-  }
+    },
+  };
 }

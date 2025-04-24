@@ -1,5 +1,7 @@
 //Imports
 
+import ErrorHandler from "@/components/Error";
+import Layout from "@/components/Layout";
 import { Menu } from "@/components/Menu";
 import { MetaData } from "@/components/MetaData";
 import {
@@ -7,11 +9,10 @@ import {
   MagnifyingGlass,
   User,
 } from "@phosphor-icons/react/dist/ssr";
-import { useEffect, useRef, useState } from "react";
 import { useDebounce } from "@uidotdev/usehooks";
 import Link from "next/link";
-import Layout from "@/components/Layout";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 //Custom modules
 
@@ -68,7 +69,7 @@ const HomePage = ({ user, genres, error }) => {
     }
   };
 
-  //if (error) return <ErrorHandler statusCode={error} />;
+  if (error?.genres) return <ErrorHandler statusCode={error?.genres} />;
   return (
     <Layout>
       <MetaData title="Kezdőlap" />
@@ -187,19 +188,26 @@ const HomePage = ({ user, genres, error }) => {
 export default HomePage;
 
 export async function getServerSideProps(ctx) {
-  try {
-    const res = await fetch(`${process.env.SERVER_URL}/api/users/me`, {
-      headers: { cookie: ctx.req.headers?.cookie },
-    });
+  const cookie = ctx.req.headers?.cookie;
 
-    if (!res.ok) throw new Error(res.status);
+  const userRes = await fetch(`${process.env.SERVER_URL}/api/users/me`, {
+    headers: { cookie },
+  });
+  const userData = userRes.ok ? await userRes.json() : null;
 
-    const res2 = await fetch(`${process.env.SERVER_URL}/api/genres`, {});
+  const dataRes = await fetch(`${process.env.SERVER_URL}/api/genres`, {
+    headers: { cookie },
+  });
+  const data = dataRes.ok ? await dataRes.json() : null;
 
-    const user = await res.json();
-    const genres = await res2.json();
-    return { props: { user, genres, error: false } };
-  } catch (error) {
-    return { props: { user: null, error: error.message } };
-  }
+  return {
+    props: {
+      user: userData,
+      geners: data,
+      error: {
+        user: userRes.status !== 200 ? userRes.status : null,
+        genres: dataRes.status !== 200 ? dataRes.status : null,
+      },
+    },
+  };
 }

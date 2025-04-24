@@ -27,7 +27,7 @@ const bookScheme = yup.object().shape({
 });
 
 //EditBookModal
-const EditBookModal = ({ bookData, authors, onClose, onSubmit }) => {
+const EditBookModal = ({ bookData, authors, genres, onClose, onSubmit }) => {
   //Router
 
   //Hooks
@@ -100,40 +100,49 @@ const EditBookModal = ({ bookData, authors, onClose, onSubmit }) => {
                   <p className="field-error-1">{formik.errors.ISBN}</p>
                 ) : null}
 
-                <Field
-                  as="select"
-                  name="authorID"
-                  className="text-input-3 w-w-full"
-                >
-                  <option disabled selected>
-                    Válassz szerzőt!
-                  </option>
-                  {authors
-                    ?.sort((a, b) => a?.author.localeCompare(b?.author))
-                    ?.map((author) => {
-                      return (
-                        <option value={author?.authorID}>
-                          {author?.author}
-                        </option>
-                      );
-                    })}
-                </Field>
+                <div className="flex flex-col md:flex-row gap-10 ">
+                  <Field
+                    as="select"
+                    name="authorID"
+                    className="text-input-3 w-w-full"
+                  >
+                    <option disabled selected>
+                      Válassz szerzőt!
+                    </option>
+                    {authors
+                      ?.sort((a, b) => a?.author.localeCompare(b?.author))
+                      ?.map((author) => {
+                        return (
+                          <option value={author?.authorID}>
+                            {author?.author}
+                          </option>
+                        );
+                      })}
+                  </Field>
 
-                {formik.touched.authorID && formik.errors.authorID ? (
-                  <p className="field-error-1">{formik.errors.authorID}</p>
-                ) : null}
+                  {formik.touched.authorID && formik.errors.authorID ? (
+                    <p className="field-error-1">{formik.errors.authorID}</p>
+                  ) : null}
 
-                <Field
-                  id="genreID"
-                  name="genreID"
-                  placeholder="genreID"
-                  className="w-full text-input-3"
-                  type="text"
-                />
-                {formik.touched.genreID && formik.errors.genreID ? (
-                  <p className="field-error-1">{formik.errors.genreID}</p>
-                ) : null}
+                  <Field
+                    as="select"
+                    name="genreID"
+                    className="text-input-3 w-w-full"
+                  >
+                    <option disabled selected>
+                      Válassz kategóriát!
+                    </option>
+                    {genres
+                      /*  ?.sort((a, b) => a?.author.localeCompare(b?.author)) */
+                      ?.map((g) => {
+                        return <option value={g?.genreID}>{g?.name}</option>;
+                      })}
+                  </Field>
 
+                  {formik.touched.genreID && formik.errors.genreID ? (
+                    <p className="field-error-1">{formik.errors.genreID}</p>
+                  ) : null}
+                </div>
                 <button className="button-2 my-auto" title="Mentés">
                   Mentés
                 </button>

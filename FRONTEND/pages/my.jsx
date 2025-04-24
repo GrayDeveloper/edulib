@@ -5,7 +5,6 @@ import LoginPage from "@/components/Login";
 import { Menu } from "@/components/Menu";
 import { MetaData } from "@/components/MetaData";
 import { useRouter } from "next/router";
-import Barcode from "react-barcode";
 import toast from "react-hot-toast";
 
 //Custom modules
@@ -20,9 +19,9 @@ const MyPage = ({ user, error }) => {
   //Objects
 
   //Functions
-  if (error === 503) return <ErrorHandler statusCode={error} />;
+  if (error?.user) return <ErrorHandler statusCode={error?.user} />;
 
-  if (!user.userID) {
+  if (!user) {
     return <LoginPage />;
   }
 
@@ -87,24 +86,19 @@ const MyPage = ({ user, error }) => {
 export default MyPage;
 
 export async function getServerSideProps(ctx) {
-  try {
-    const res = await fetch(`${process.env.SERVER_URL}/api/users/me`, {
-      headers: {
-        cookie: ctx.req.headers?.cookie,
+  const cookie = ctx.req.headers?.cookie;
+
+  const userRes = await fetch(`${process.env.SERVER_URL}/api/users/me`, {
+    headers: { cookie },
+  });
+  const userData = userRes.ok ? await userRes.json() : null;
+
+  return {
+    props: {
+      user: userData,
+      error: {
+        user: userRes.status !== 200 ? userRes.status : null,
       },
-    });
-    const data = await res.json();
-    return {
-      props: {
-        user: data,
-        error: res?.status,
-      },
-    };
-  } catch (error) {
-    return {
-      props: {
-        error: 503,
-      },
-    };
-  }
+    },
+  };
 }

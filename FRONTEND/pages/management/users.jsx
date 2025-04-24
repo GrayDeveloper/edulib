@@ -1,12 +1,11 @@
 //Imports
 
+import ErrorHandler from "@/components/Error";
 import Layout from "@/components/Layout";
 import { Menu } from "@/components/Menu";
 import { MetaData } from "@/components/MetaData";
 import EditUserModal from "@/components/modals/EditUserModal";
-import { Dialog, DialogPanel } from "@headlessui/react";
-import { Pencil, Plus, X } from "@phosphor-icons/react/dist/ssr";
-import { Field, Formik } from "formik";
+import { Pencil, X } from "@phosphor-icons/react/dist/ssr";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -62,6 +61,14 @@ const UsersManagmentPage = ({ users, user, error }) => {
       }
     });
   };
+
+  if (error?.protected) {
+    return <ErrorHandler statusCode={error?.protected} />;
+  }
+
+  if (error?.user) {
+    return <ErrorHandler statusCode={error?.user} />;
+  }
 
   return (
     <>
@@ -150,33 +157,26 @@ const UsersManagmentPage = ({ users, user, error }) => {
 export default UsersManagmentPage;
 
 export async function getServerSideProps(ctx) {
-  try {
-    const userRes = await fetch(`${process.env.SERVER_URL}/api/users/me`, {
-      headers: {
-        cookie: ctx.req.headers?.cookie,
-      },
-    });
-    const userData = await userRes.json();
+  const cookie = ctx.req.headers?.cookie;
 
-    const usersRes = await fetch(`${process.env.SERVER_URL}/api/users`, {
-      headers: {
-        cookie: ctx.req.headers?.cookie,
-      },
-    });
-    const usersData = await usersRes.json();
+  const userRes = await fetch(`${process.env.SERVER_URL}/api/users/me`, {
+    headers: { cookie },
+  });
+  const userData = userRes.ok ? await userRes.json() : null;
 
-    return {
-      props: {
-        user: userData,
-        users: usersData,
-        error: userRes?.status || usersRes?.status,
+  const dataRes = await fetch(`${process.env.SERVER_URL}/api/users`, {
+    headers: { cookie },
+  });
+  const data = dataRes.ok ? await dataRes.json() : null;
+
+  return {
+    props: {
+      user: userData,
+      users: data,
+      error: {
+        user: userRes.status !== 200 ? userRes.status : null,
+        protected: dataRes.status !== 200 ? dataRes.status : null,
       },
-    };
-  } catch (error) {
-    return {
-      props: {
-        error: 503,
-      },
-    };
-  }
+    },
+  };
 }

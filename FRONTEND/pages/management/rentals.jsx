@@ -1,25 +1,24 @@
 //Imports
 
+import { BarcodeButton } from "@/components/BarcodeButton";
+import ErrorHandler from "@/components/Error";
+import Layout from "@/components/Layout";
 import { Menu } from "@/components/Menu";
 import { MetaData } from "@/components/MetaData";
-import "moment/locale/hu";
 import {
   Archive,
   Check,
   ClockClockwise,
   Funnel,
   HandArrowDown,
-  HandArrowUp,
   Question,
   X,
 } from "@phosphor-icons/react/dist/ssr";
 import moment from "moment";
-import Link from "next/link";
-import { useState } from "react";
+import "moment/locale/hu";
 import { useRouter } from "next/router";
+import { useState } from "react";
 import toast from "react-hot-toast";
-import { BarcodeButton } from "@/components/BarcodeButton";
-import Layout from "@/components/Layout";
 
 //Custom modules
 
@@ -104,6 +103,15 @@ const RentalManagementPage = ({ user, rentals, error }) => {
       }
     });
   };
+
+  if (error?.protected) {
+    return <ErrorHandler statusCode={error?.protected} />;
+  }
+
+  if (error?.user) {
+    return <ErrorHandler statusCode={error?.user} />;
+  }
+
   return (
     <Layout>
       <MetaData title="Kölcsönzések" />
@@ -114,12 +122,14 @@ const RentalManagementPage = ({ user, rentals, error }) => {
           Kölcsönzések
         </h1>
 
+        <BarcodeButton markRental={markRental} className="hidden md:flex" />
+
         <div className="flex flex-wrap w-full gap-5">
           {filters?.map((f) => {
             return (
               <button
                 title={f?.name + " szűrő beállítása"}
-                className={`font-semibold px-4 py-2 rounded-lg w-fit ${
+                className={`font-semibold px-4 py-2 rounded-full w-fit ${
                   Filter.id == f.id ? "bg-mint text-white" : "bg-gray-100"
                 }`}
                 onClick={() => {
@@ -152,6 +162,7 @@ const RentalManagementPage = ({ user, rentals, error }) => {
             .map((rental) => {
               return (
                 <div
+                  key={rental?.rentalID}
                   className={`min-w-[700px] flex justify-center items-center px-4 py-2 my-1 ${
                     rental?.status == "ended" && "disabled opacity-50"
                   }`}
@@ -230,33 +241,26 @@ const RentalManagementPage = ({ user, rentals, error }) => {
 export default RentalManagementPage;
 
 export async function getServerSideProps(ctx) {
-  try {
-    const userRes = await fetch(`${process.env.SERVER_URL}/api/users/me`, {
-      headers: {
-        cookie: ctx.req.headers?.cookie,
-      },
-    });
-    const userData = await userRes.json();
+  const cookie = ctx.req.headers?.cookie;
 
-    const rentalsRes = await fetch(`${process.env.SERVER_URL}/api/rentals`, {
-      headers: {
-        cookie: ctx.req.headers?.cookie,
-      },
-    });
-    const rentalsData = await rentalsRes.json();
+  const userRes = await fetch(`${process.env.SERVER_URL}/api/users/me`, {
+    headers: { cookie },
+  });
+  const userData = userRes.ok ? await userRes.json() : null;
 
-    return {
-      props: {
-        user: userData,
-        rentals: rentalsData,
-        error: userRes?.status || rentalsRes?.status,
+  const dataRes = await fetch(`${process.env.SERVER_URL}/api/rentals`, {
+    headers: { cookie },
+  });
+  const data = dataRes.ok ? await dataRes.json() : null;
+
+  return {
+    props: {
+      user: userData,
+      rentals: data,
+      error: {
+        user: userRes.status !== 200 ? userRes.status : null,
+        protected: dataRes.status !== 200 ? dataRes.status : null,
       },
-    };
-  } catch (error) {
-    return {
-      props: {
-        error: 503,
-      },
-    };
-  }
+    },
+  };
 }

@@ -3,7 +3,7 @@ import { MetaData } from "./MetaData";
 import Link from "next/link";
 
 const codeLookup = {
-  401: "Nincs jogosultságod az oldal megtekintéséhez!",
+  401: "Jelentkezz be az oldal megtekintéséhez!",
   403: "Hozzáférés megtagadva!",
   404: "Az oldal nem található...",
   500: "Valami hiba történt...",

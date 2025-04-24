@@ -1,10 +1,10 @@
 //Imports
 
 //Custom modules
+import ErrorHandler from "@/components/Error";
 import LoginPage from "@/components/Login";
-import ErrorPage from "@/components/Error";
-import { MetaData } from "@/components/MetaData";
 import { Menu } from "@/components/Menu";
+import { MetaData } from "@/components/MetaData";
 import Link from "next/link";
 
 //RentalsPage
@@ -17,7 +17,11 @@ const RentalsPage = ({ user, rentals, error }) => {
 
   //Functions
 
-  if (user === undefined) return <LoginPage />;
+  if (error?.user) return <ErrorHandler statusCode={error?.user} />;
+
+  if (!user) {
+    return <LoginPage />;
+  }
 
   return (
     <div className="min-h-screen w-screen bg-white flex flex-col">
@@ -44,8 +48,9 @@ const RentalsPage = ({ user, rentals, error }) => {
                   >
                     <img
                       src={
-                        "https://placehold.co/248x350/709e87/FFF?text=" +
-                        rental?.book?.title
+                        rental?.book?.cover ||
+                        "https://placehold.co/248x350/709e87/FFF?font=playfair-display&text=" +
+                          rental?.book?.title
                       }
                       className="rounded-3xl w-full aspect-[1/1.414] bg-cover bg-center"
                     />
@@ -68,34 +73,26 @@ const RentalsPage = ({ user, rentals, error }) => {
 export default RentalsPage;
 
 export async function getServerSideProps(ctx) {
-  try {
-    const res = await fetch(`${process.env.SERVER_URL}/api/users/me`, {
-      headers: {
-        cookie: ctx.req.headers?.cookie,
-      },
-    });
-    const data = await res.json();
+  const cookie = ctx.req.headers?.cookie;
 
-    const rentalRes = await fetch(`${process.env.SERVER_URL}/api/rentals/my`, {
-      headers: {
-        cookie: ctx.req.headers?.cookie,
-      },
-    });
+  const userRes = await fetch(`${process.env.SERVER_URL}/api/users/me`, {
+    headers: { cookie },
+  });
+  const userData = userRes.ok ? await userRes.json() : null;
 
-    const rentalData = await rentalRes.json();
+  const dataRes = await fetch(`${process.env.SERVER_URL}/api/rentals/my`, {
+    headers: { cookie },
+  });
+  const data = dataRes.ok ? await dataRes.json() : null;
 
-    return {
-      props: {
-        user: data,
-        rentals: rentalData,
-        error: res?.status,
+  return {
+    props: {
+      user: userData,
+      rentals: data,
+      error: {
+        user: userRes.status !== 200 ? userRes.status : null,
+        rentals: dataRes.status !== 200 ? dataRes.status : null,
       },
-    };
-  } catch (error) {
-    return {
-      props: {
-        error: 503,
-      },
-    };
-  }
+    },
+  };
 }

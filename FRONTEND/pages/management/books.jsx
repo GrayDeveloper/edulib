@@ -1,18 +1,17 @@
 //Imports
 
+import ErrorHandler from "@/components/Error";
 import { Menu } from "@/components/Menu";
 import { MetaData } from "@/components/MetaData";
 import EditBookModal from "@/components/modals/EditBookModal";
-import { Dialog, DialogPanel } from "@headlessui/react";
-import { CaretDown, Pencil, Plus, Trash } from "@phosphor-icons/react/dist/ssr";
-import { Field, Formik } from "formik";
+import { Pencil, Plus } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
 //BooksManagementPage
-const BooksManagementPage = ({ books, user, error }) => {
+const BooksManagementPage = ({ books, user, genres, error }) => {
   //Router
   const router = useRouter();
 
@@ -25,7 +24,7 @@ const BooksManagementPage = ({ books, user, error }) => {
   //Objects
   const authors = Array.from(
     new Map(
-      books.map(({ author, authorID }) => [authorID, { author, authorID }])
+      books?.map(({ author, authorID }) => [authorID, { author, authorID }])
     ).values()
   );
 
@@ -93,6 +92,14 @@ const BooksManagementPage = ({ books, user, error }) => {
     });
   };
 
+  if (error?.protected) {
+    return <ErrorHandler statusCode={error?.protected} />;
+  }
+
+  if (error?.user) {
+    return <ErrorHandler statusCode={error?.user} />;
+  }
+
   return (
     <>
       <EditBookModal
@@ -108,6 +115,7 @@ const BooksManagementPage = ({ books, user, error }) => {
         }}
         bookData={bookData}
         authors={authors}
+        genres={genres}
       />
       <div className="min-h-screen w-screen bg-white flex flex-col">
         <MetaData title="Könyvtár" />
@@ -133,9 +141,11 @@ const BooksManagementPage = ({ books, user, error }) => {
               </option>
               {authors
                 ?.sort((a, b) => a?.author.localeCompare(b?.author))
-                ?.map((author) => {
+                ?.map((author, i) => {
                   return (
-                    <option value={author?.authorID}>{author?.author}</option>
+                    <option value={author?.authorID} key={i}>
+                      {author?.author}
+                    </option>
                   );
                 })}
             </select>
@@ -157,6 +167,7 @@ const BooksManagementPage = ({ books, user, error }) => {
               <div className="flex-[0.5] text-left pr-4 ">Azonosító</div>
               <div className="flex-[3] text-left px-2 ">Cím</div>
               <div className="flex-[2] text-left px-2 ">Szerző</div>
+              <div className="flex-[1] text-left px-2 ">ISBN</div>
               <div className="flex-[2] text-left px-2 ">Leltár számok</div>
               <div className="flex-[1] text-center px-2 ">Funkciók</div>
             </div>
@@ -184,6 +195,9 @@ const BooksManagementPage = ({ books, user, error }) => {
                     >
                       {book?.author}
                     </Link>
+                    <div className="flex-[1]  font-medium px-2 ">
+                      {book?.ISBN}
+                    </div>
                     <div className="flex-[2] px-2 flex gap-5">
                       {book?.inventory?.map((i) => {
                         return (
@@ -195,6 +209,10 @@ const BooksManagementPage = ({ books, user, error }) => {
                           </Link>
                         );
                       })}
+
+                      {book?.inventory?.length > 0 && (
+                        <span className="italic">{`(${book?.inventory?.length} db)`}</span>
+                      )}
                     </div>
                     <div className="flex-[1] flex px-2 gap-2.5 justify-center">
                       <button
@@ -224,33 +242,33 @@ const BooksManagementPage = ({ books, user, error }) => {
 export default BooksManagementPage;
 
 export async function getServerSideProps(ctx) {
-  try {
-    const userRes = await fetch(`${process.env.SERVER_URL}/api/users/me`, {
-      headers: {
-        cookie: ctx.req.headers?.cookie,
-      },
-    });
-    const userData = await userRes.json();
+  const cookie = ctx.req.headers?.cookie;
 
-    const booksRes = await fetch(`${process.env.SERVER_URL}/api/books`, {
-      headers: {
-        cookie: ctx.req.headers?.cookie,
-      },
-    });
-    const booksData = await booksRes.json();
+  const userRes = await fetch(`${process.env.SERVER_URL}/api/users/me`, {
+    headers: { cookie },
+  });
+  const userData = userRes.ok ? await userRes.json() : null;
 
-    return {
-      props: {
-        user: userData,
-        books: booksData,
-        error: userRes?.status || booksRes?.status,
+  const dataRes = await fetch(`${process.env.SERVER_URL}/api/books`, {
+    headers: { cookie },
+  });
+  const data = dataRes.ok ? await dataRes.json() : null;
+
+  const dataRes2 = await fetch(`${process.env.SERVER_URL}/api/genres`, {
+    headers: { cookie },
+  });
+  const data2 = dataRes2.ok ? await dataRes2.json() : null;
+
+  return {
+    props: {
+      user: userData,
+      books: data,
+      genres: data2,
+      error: {
+        user: userRes.status !== 200 ? userRes.status : null,
+        genres: dataRes2.status !== 200 ? dataRes2.status : null,
+        protected: dataRes.status !== 200 ? dataRes.status : null,
       },
-    };
-  } catch (error) {
-    return {
-      props: {
-        error: 503,
-      },
-    };
-  }
+    },
+  };
 }

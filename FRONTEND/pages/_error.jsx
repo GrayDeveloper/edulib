@@ -1,6 +1,4 @@
 import ErrorHandler from "@/components/Error";
-import { MetaData } from "@/components/MetaData";
-import Link from "next/link";
 
 function Error({ statusCode }) {
   return <ErrorHandler statusCode={statusCode} />;

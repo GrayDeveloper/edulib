@@ -4,9 +4,7 @@ import ErrorHandler from "@/components/Error";
 import { Menu } from "@/components/Menu";
 import { MetaData } from "@/components/MetaData";
 import {
-  CalendarDot,
   CalendarDots,
-  ClockClockwise,
   ClockCounterClockwise,
 } from "@phosphor-icons/react/dist/ssr";
 import moment from "moment";
@@ -120,7 +118,8 @@ const BookPage = ({ book, rentals, user, error }) => {
             src={
               book?.cover
                 ? book?.cover
-                : "https://placehold.co/248x350/709e87/FFF?text=" + book?.title
+                : "https://placehold.co/248x350/709e87/FFF?font=playfair-display&text=" +
+                  book?.title
             }
             className="bg-mint w-full h-full rounded-3xl "
           />
@@ -147,6 +146,15 @@ const BookPage = ({ book, rentals, user, error }) => {
             <h2 className="text-lg md:text-2xl text-charcoal/90 font-semibold">
               Kölcsönzés
             </h2>
+
+            {!user?.name && (
+              <p className="text-wrap w-3/4">
+                A kölcsönzéshez kérlek{" "}
+                <Link href="/login" className="font-semibold italic">
+                  jelentkezz be!
+                </Link>
+              </p>
+            )}
 
             {book?.inventory?.available > 0 ? (
               <div className="tag-2 font-semibold w-fit">
@@ -259,7 +267,7 @@ const BookPage = ({ book, rentals, user, error }) => {
               </>
             ) : (
               <div className="flex flex-row gap-5">
-                {book?.inventory?.available > 0 && (
+                {user?.name && book?.inventory?.available > 0 && (
                   <button
                     title="Kölcsönzés"
                     className="button-3"

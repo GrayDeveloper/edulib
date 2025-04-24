@@ -1,39 +1,30 @@
 //Imports
-import { Chart as ChartJS, ArcElement, Tooltip } from "chart.js";
+import { ArcElement, Chart as ChartJS, Tooltip } from "chart.js";
 ChartJS.register(ArcElement, Tooltip);
 
+import ErrorHandler from "@/components/Error";
+import Layout from "@/components/Layout";
 import { Menu } from "@/components/Menu";
 import { MetaData } from "@/components/MetaData";
-import Link from "next/link";
-import { Pie } from "react-chartjs-2";
-import { useState } from "react";
 import {
   Archive,
+  Barcode,
   BookBookmark,
   Books,
-  Check,
-  ClockClockwise,
   Funnel,
-  HandArrowDown,
   Pencil,
-  Question,
-  Trash,
   User,
 } from "@phosphor-icons/react/dist/ssr";
-import { BarcodeButton } from "@/components/BarcodeButton";
-import Layout from "@/components/Layout";
+import Link from "next/link";
+import { Pie } from "react-chartjs-2";
 
 //Custom modules
 
 //ManagementPage
-const ManagemenetPage = ({ user, stats, rentals, error }) => {
+const ManagemenetPage = ({ user, stats, error }) => {
   //Router
 
   //Hooks
-  const [Filter, setFilter] = useState({
-    id: "all",
-    name: "Összes kölcsönzés",
-  });
 
   //Objects
   const pages = [
@@ -62,6 +53,16 @@ const ManagemenetPage = ({ user, stats, rentals, error }) => {
       name: "Szerzők",
       icon: <Pencil size={25} weight="bold" />,
     },
+    {
+      id: "genres",
+      name: "Műfajok",
+      icon: <Funnel size={25} weight="bold" />,
+    },
+    {
+      id: "barcode",
+      name: "Vonalkód",
+      icon: <Barcode size={25} weight="bold" />,
+    },
   ];
 
   const backgroundColors = [
@@ -74,6 +75,15 @@ const ManagemenetPage = ({ user, stats, rentals, error }) => {
   ];
 
   //Functions
+
+  if (error?.protected) {
+    return <ErrorHandler statusCode={error?.protected} />;
+  }
+
+  if (error?.user) {
+    return <ErrorHandler statusCode={error?.user} />;
+  }
+
   return (
     <Layout>
       <MetaData title="Könyvtár" />
@@ -83,7 +93,6 @@ const ManagemenetPage = ({ user, stats, rentals, error }) => {
         <h1 className="text-2xl md:text-3xl text-charcoal font-semibold mx-10 mt-10 text-center md:text-left">
           Szép napot, {user?.name}!
         </h1>
-        <BarcodeButton className="my-10" />
 
         <div className="mx-10">
           <div className="flex flex-col md:flex-row justify-around gap-10">
@@ -160,36 +169,26 @@ const ManagemenetPage = ({ user, stats, rentals, error }) => {
 export default ManagemenetPage;
 
 export async function getServerSideProps(ctx) {
-  try {
-    const userRes = await fetch(`${process.env.SERVER_URL}/api/users/me`, {
-      headers: {
-        cookie: ctx.req.headers?.cookie,
-      },
-    });
-    const userData = await userRes.json();
+  const cookie = ctx.req.headers?.cookie;
 
-    const statsRes = await fetch(
-      `${process.env.SERVER_URL}/api/library/stats`,
-      {
-        headers: {
-          cookie: ctx.req.headers?.cookie,
-        },
-      }
-    );
-    const statsData = await statsRes.json();
+  const userRes = await fetch(`${process.env.SERVER_URL}/api/users/me`, {
+    headers: { cookie },
+  });
+  const userData = userRes.ok ? await userRes.json() : null;
 
-    return {
-      props: {
-        user: userData,
-        stats: statsData,
-        error: userRes?.status || statsRes?.status,
+  const statsRes = await fetch(`${process.env.SERVER_URL}/api/library/stats`, {
+    headers: { cookie },
+  });
+  const statsData = statsRes.ok ? await statsRes.json() : null;
+
+  return {
+    props: {
+      user: userData,
+      stats: statsData,
+      error: {
+        user: userRes.status !== 200 ? userRes.status : null,
+        protected: statsRes.status !== 200 ? statsRes.status : null,
       },
-    };
-  } catch (error) {
-    return {
-      props: {
-        error: 503,
-      },
-    };
-  }
+    },
+  };
 }

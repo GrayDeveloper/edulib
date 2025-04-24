@@ -16,9 +16,7 @@ const LoginPage = ({ user, error }) => {
 
   //Functions
   if (!user) return <LoginModule />;
-  if (error) return <ErrorHandler statusCode={error} />;
-
-  //didComponentMount
+  if (error?.user) return <ErrorHandler statusCode={error} />;
 
   return useEffect(() => {
     router.replace("/");
@@ -28,16 +26,19 @@ const LoginPage = ({ user, error }) => {
 export default LoginPage;
 
 export async function getServerSideProps(ctx) {
-  try {
-    const res = await fetch(`${process.env.SERVER_URL}/api/users/me`, {
-      headers: { cookie: ctx.req.headers?.cookie },
-    });
+  const cookie = ctx.req.headers?.cookie;
 
-    if (!res.ok) throw new Error(res.status); // Handle non-200 responses
+  const userRes = await fetch(`${process.env.SERVER_URL}/api/users/me`, {
+    headers: { cookie },
+  });
+  const userData = userRes.ok ? await userRes.json() : null;
 
-    const user = await res.json();
-    return { props: { user, error: false } };
-  } catch (error) {
-    return { props: { user: null, error: error.message } };
-  }
+  return {
+    props: {
+      user: userData,
+      error: {
+        user: userRes.status !== 200 ? userRes.status : null,
+      },
+    },
+  };
 }
