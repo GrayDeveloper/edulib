@@ -3,6 +3,7 @@ services:
   db:
     image: mariadb:latest
     container_name: edulib-database
+
     env_file:
       - ./BACKEND/.env
     ports:
@@ -62,6 +63,7 @@ services:
 
     networks:
       - app-network
+    attach: false
 networks:
   app-network:
 
