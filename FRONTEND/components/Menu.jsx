@@ -25,11 +25,6 @@ const menuList = [
     name: "Könyvtár",
     permission: 1,
   },
-  {
-    url: "/management/server",
-    name: "Szerver",
-    permission: 2,
-  },
 ];
 
 const MenuItem = ({ name, url, selected }) => {

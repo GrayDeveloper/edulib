@@ -4,7 +4,7 @@ import ErrorHandler from "@/components/Error";
 import { Menu } from "@/components/Menu";
 import { MetaData } from "@/components/MetaData";
 import EditBookModal from "@/components/modals/EditBookModal";
-import { Pencil, Plus } from "@phosphor-icons/react/dist/ssr";
+import { MagnifyingGlass, Pencil, Plus } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -168,7 +168,7 @@ const BooksManagementPage = ({ books, user, genres, error }) => {
               <div className="flex-[3] text-left px-2 ">Cím</div>
               <div className="flex-[2] text-left px-2 ">Szerző</div>
               <div className="flex-[1] text-left px-2 ">ISBN</div>
-              <div className="flex-[2] text-left px-2 ">Leltár számok</div>
+              <div className="flex-[2] text-left px-2 ">Leltár</div>
               <div className="flex-[1] text-center px-2 ">Funkciók</div>
             </div>
 
@@ -177,18 +177,22 @@ const BooksManagementPage = ({ books, user, genres, error }) => {
                 Filter.authorID ? Filter.authorID === i.authorID : i.authorID
               )
 
-              ?.filter((i) =>
+              /*      ?.filter((i) =>
                 Filter.title ? i.title?.includes(Filter.title) : i.title
-              )
+              ) */
               ?.map((book) => {
                 return (
                   <div className="min-w-[700px] flex justify-center items-center px-4 py-2 my-1">
                     <div className="flex-[0.5] text-gray-500 pr-4 ">
                       {book?.bookID}
                     </div>
-                    <div className="flex-[3]  font-medium px-2 ">
+                    <Link
+                      href={"/books/" + book?.slug}
+                      target="  _blank"
+                      className="flex-[3]  font-medium px-2 "
+                    >
                       {book?.title}
-                    </div>
+                    </Link>
                     <Link
                       href={`/authors/${book?.authorID}`}
                       className={`flex-[2] text-left text-gray-600 px-2 truncate w-fit `}
@@ -198,17 +202,29 @@ const BooksManagementPage = ({ books, user, genres, error }) => {
                     <div className="flex-[1]  font-medium px-2 ">
                       {book?.ISBN}
                     </div>
-                    <div className="flex-[2] px-2 flex gap-5">
-                      {book?.inventory?.map((i) => {
+                    <div className="flex-[2] px-2 flex gap-5 items-center">
+                      <button
+                        title="Megtekintés"
+                        className="bg-black text-white p-2 rounded-xl"
+                        onClick={() => {
+                          router.push(
+                            `/management/inventory?filter=${book?.bookID}`
+                          );
+                        }}
+                      >
+                        <MagnifyingGlass size={20} weight="bold" />
+                      </button>
+
+                      {/*             {book?.inventory?.map((i) => {
                         return (
                           <Link
                             className="font-semibold"
-                            href={`/management/inventory/${i?.inventoryID}`}
+                            href={`/management/inventory?id=${i?.inventoryID}`}
                           >
                             {i?.inventoryID}
                           </Link>
                         );
-                      })}
+                      })} */}
 
                       {book?.inventory?.length > 0 && (
                         <span className="italic">{`(${book?.inventory?.length} db)`}</span>
@@ -225,9 +241,13 @@ const BooksManagementPage = ({ books, user, genres, error }) => {
                         <Pencil size={20} weight="bold" />
                       </button>
 
-                      {/*   <button className="bg-black text-white p-2 rounded-xl">
+                      <Link
+                        className="bg-black text-white p-2 rounded-xl"
+                        title="Új példány"
+                        href={`/management/inventory?id=new&bookID=${book?.bookID}`}
+                      >
                         <Plus size={20} weight="bold" />
-                      </button> */}
+                      </Link>
                     </div>
                   </div>
                 );

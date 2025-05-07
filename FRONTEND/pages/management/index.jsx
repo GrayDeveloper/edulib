@@ -53,11 +53,11 @@ const ManagemenetPage = ({ user, stats, error }) => {
       name: "Szerzők",
       icon: <Pencil size={25} weight="bold" />,
     },
-    {
+    /*     {
       id: "genres",
       name: "Műfajok",
       icon: <Funnel size={25} weight="bold" />,
-    },
+    }, */
     {
       id: "barcode",
       name: "Vonalkód",

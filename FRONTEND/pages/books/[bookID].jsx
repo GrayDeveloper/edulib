@@ -141,6 +141,9 @@ const BookPage = ({ book, rentals, user, error }) => {
           <p className="text-lg md:text-xl text-charcoal/90 font-light w-3/4">
             {book?.description}
           </p>
+          <p className="w-3/4 text-charcoal/90">
+            Kiadvány száma: {book?.ISBN ? book?.ISBN : book?.bookID}
+          </p>
 
           <div className="mt-auto flex flex-col gap-5 w-full  ">
             <h2 className="text-lg md:text-2xl text-charcoal/90 font-semibold">
