@@ -29,7 +29,7 @@ module.exports = function (sequelize) {
 
       status: {
         type: DataTypes.ENUM,
-        values: ["available", "rented", "missing", "damaged", "pending"],
+        values: ["available", "rented", "missing", "damaged", "pending", "new"],
         defaultValue: "available",
       },
     },

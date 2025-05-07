@@ -12,4 +12,5 @@ router.use("/books", require("./books"));
 router.use("/library", require("./library"));
 router.use("/rentals", require("./rentals"));
 router.use("/genres", require("./genres"));
+router.use("/inventory", require("./inventory"));
 module.exports = router;

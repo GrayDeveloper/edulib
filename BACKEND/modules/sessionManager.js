@@ -29,7 +29,7 @@ const sessionManager = (app) => {
   app.use(
     cors({
       origin: [
-        "http://" + process.env.APP_DOMAIN,
+        process.env.APP_DOMAIN,
         "http://localhost:3000",
         "http://127.0.0.1:3000",
         "http://frontend_server:3000",

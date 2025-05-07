@@ -47,6 +47,7 @@ sequelize
               logger.log("error", `Error creating admin user: ${error}`)
             );
 
+          console.log(process.env.APP_DEMO);
           if (process.env.APP_DEMO) {
             loadExampleData();
           }
@@ -67,8 +68,7 @@ const loadExampleData = async () => {
     logger.log("db", `Default authors loaded.`)
   );
 
-  const books = require("../example/authors.json");
-
+  const books = require("../example/books.json");
   books?.map(async (b) => {
     await Book.create({
       title: b.title,
@@ -77,25 +77,22 @@ const loadExampleData = async () => {
       authorID: b.authorID,
       genreID: b.genreID,
       slug: convert(b.title),
-    });
-  });
-
-  logger.log("db", `Default books loaded.`);
-
-  Book.findAll({}).then(async (books) => {
-    books.forEach(async (book) => {
+    }).then((book) => {
       const stock = Math.floor(Math.random() * 3) + 1;
 
       for (let i = 0; i < stock; i++) {
-        await Inventory.create({
+        Inventory.create({
           bookID: book.bookID,
           intake: new Date(),
           size: "medium",
           status: "available",
         });
       }
+      logger.log("db", `Book ${book.title} added ${stock} dummy stock.`);
     });
   });
+
+  logger.log("db", `Default books loaded.`);
 
   logger.log("db", `Example inventory loaded.`);
 
